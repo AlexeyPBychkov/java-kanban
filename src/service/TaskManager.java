@@ -6,6 +6,7 @@ import model.Task;
 import model.TaskStatus;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class TaskManager {
@@ -16,8 +17,9 @@ public class TaskManager {
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
 
-    public HashMap<Integer, Task> getTasks() {
-        return this.tasks;
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task> taskList = new ArrayList<>(tasks.values());
+        return taskList;
     }
 
     public void deleteAllTasks() {
@@ -41,12 +43,14 @@ public class TaskManager {
         tasks.remove(id);
     }
 
-    public HashMap<Integer, Epic> getEpics() {
-        return epics;
+    public ArrayList<Epic> getEpics() {
+        ArrayList<Epic> epicList = new ArrayList<>(epics.values());
+        return epicList;
     }
 
     public void deleteAllEpics() {
         epics.clear();
+        subtasks.clear();
     }
 
     public Epic getEpicById(int id) {
@@ -63,17 +67,29 @@ public class TaskManager {
     }
 
     public void deleteEpicById(int id) {
+        ArrayList<Subtask> subtasksFromEpic = epics.get(id).getSubtasks();
+        for(Subtask subtask : subtasksFromEpic) {
+            int keyForDelete = -1;
+            for(int key : subtasks.keySet()) {
+                if(subtask.equals(subtasks.get(key))){
+                    keyForDelete = key;
+                }
+            }
+            subtasks.remove(keyForDelete);
+        }
         epics.remove(id);
     }
 
-    public HashMap<Integer, Subtask> getSubtasks() {
-        return subtasks;
+    public ArrayList<Subtask> getSubtasks() {
+        ArrayList subtaskList = new ArrayList<>(subtasks.values());
+        return subtaskList;
     }
 
     public void deleteAllSubtasks() {
         subtasks.clear();
         for (int key : epics.keySet()) {
             epics.get(key).setStatus(TaskStatus.NEW);
+            epics.get(key).getSubtasks().clear();
         }
     }
 
@@ -133,8 +149,8 @@ public class TaskManager {
         epic.setStatus(TaskStatus.IN_PROGRESS);
     }
 
-    public ArrayList<Subtask> getSubtasksByEpic(Epic epic) {
-        return epic.getSubtasks();
+    public ArrayList<Subtask> getSubtasksByEpicId(int epicId) {
+        return epics.get(epicId).getSubtasks();
     }
 
     private int getCurrentId() {
