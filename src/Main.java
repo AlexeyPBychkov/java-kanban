@@ -2,12 +2,14 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 import model.TaskStatus;
+import service.InMemoryTaskManager;
+import service.Managers;
 import service.TaskManager;
 
 public class Main {
     public static void main(String[] args) {
 
-        TaskManager tm = new TaskManager();
+        TaskManager tm = Managers.getDefault();
         Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW);
         Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.NEW);
         Epic epic1 = new Epic("Эпик 1", "Эпик с двумя подзадачами");
@@ -25,6 +27,20 @@ public class Main {
         tm.createSubtask(subtask3);
 
         printTasks(tm);
+        tm.getTaskById(0);
+        tm.getTaskById(1);
+        tm.getEpicById(2);
+        tm.getEpicById(3);
+        tm.getSubtaskById(4);
+        tm.getSubtaskById(5);
+        tm.getSubtaskById(6);
+        tm.getTaskById(0);
+        tm.getTaskById(1);
+        tm.getEpicById(2);
+        tm.getEpicById(3);
+        tm.getSubtaskById(4);
+        tm.getSubtaskById(5);
+        tm.getSubtaskById(6);
 
         task1.setStatus(TaskStatus.DONE);
         task2.setStatus(TaskStatus.IN_PROGRESS);
@@ -43,6 +59,7 @@ public class Main {
         tm.deleteEpicById(2);
 
         printTasks(tm);
+        printAllTasks(tm);
     }
 
     static void printTasks(TaskManager tm){
@@ -50,5 +67,29 @@ public class Main {
         System.out.println("Список Эпиков - " + tm.getEpics().toString());
         System.out.println("Список задач - " + tm.getTasks().toString());
         System.out.println("Список подзадач - " + tm.getSubtasks().toString());
+    }
+
+    private static void printAllTasks(TaskManager manager) {
+        System.out.println("Задачи:");
+        for (Task task : manager.getTasks()) {
+            System.out.println(task);
+        }
+        System.out.println("Эпики:");
+        for (Task epic : manager.getEpics()) {
+            System.out.println(epic);
+
+            for (Task task : manager.getSubtasksByEpicId(epic.getId())) {
+                System.out.println("--> " + task);
+            }
+        }
+        System.out.println("Подзадачи:");
+        for (Task subtask : manager.getSubtasks()) {
+            System.out.println(subtask);
+        }
+
+        System.out.println("История:");
+        for (Task task : manager.getHistory()) {
+            System.out.println(task);
+        }
     }
 }
