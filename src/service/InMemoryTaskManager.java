@@ -6,11 +6,12 @@ import model.Task;
 import model.TaskStatus;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
     private int seqId = -1;
-    private HistoryManager historyManager;
+    private final HistoryManager historyManager;
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
@@ -22,8 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Task> getTasks() {
-        ArrayList<Task> taskList = new ArrayList<>(tasks.values());
-        return taskList;
+        return new ArrayList<>(tasks.values());
     }
 
     @Override
@@ -99,8 +99,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Subtask> getSubtasks() {
-        ArrayList subtaskList = new ArrayList<>(subtasks.values());
-        return subtaskList;
+        return new ArrayList<>(subtasks.values());
     }
 
     @Override
@@ -179,7 +178,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return historyManager.getHistoryList();
     }
 

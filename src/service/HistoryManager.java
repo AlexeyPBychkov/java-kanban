@@ -2,10 +2,10 @@ package service;
 
 import model.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface HistoryManager<T extends Task> {
-    ArrayList<T> getHistoryList();
+    List<T> getHistoryList();
 
     void add(T task);
 }
