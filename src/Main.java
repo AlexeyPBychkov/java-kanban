@@ -51,7 +51,7 @@ public class Main {
         printHistory(tm);
     }
 
-    static void printTasks(TaskManager tm){
+    static void printTasks(TaskManager tm) {
         System.out.println("////////////////");
         System.out.println("Список Эпиков - " + tm.getEpics().toString());
         System.out.println("Список задач - " + tm.getTasks().toString());
