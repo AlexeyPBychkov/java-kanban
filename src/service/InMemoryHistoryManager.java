@@ -8,21 +8,21 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private static class Node {
-        Node prev;
-        Node next;
-        Task element;
+    private HashMap<Integer, Node> historyMap;
+    private Node last;
+    private Node prev;
 
-        Node(Node prev, Task element, Node next) {
-            this.prev = prev;
-            this.element = element;
-            this.next = next;
+    private void linkLast(Task task) {
+        final Node lastNode = last;
+        final Node newNode = new Node(lastNode, task, null);
+        last = newNode;
+        if (lastNode == null) {
+            prev = newNode;
+        } else {
+            lastNode.next = newNode;
         }
+        historyMap.put(task.getId(), newNode);
     }
-
-    HashMap<Integer, Node> historyMap;
-    Node last;
-    Node prev;
 
     public InMemoryHistoryManager() {
         historyMap = new HashMap<>();
@@ -52,19 +52,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    void linkLast(Task task) {
-        final Node lastNode = last;
-        final Node newNode = new Node(lastNode, task, null);
-        last = newNode;
-        if (lastNode == null) {
-            prev = newNode;
-        } else {
-            lastNode.next = newNode;
-        }
-        historyMap.put(task.getId(), newNode);
-    }
-
-    ArrayList<Task> getTasks() {
+    private ArrayList<Task> getTasks() {
         ArrayList<Task> tasksList = new ArrayList<>();
         Node currentNode = prev;
         while (currentNode != null) {
@@ -74,7 +62,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return tasksList;
     }
 
-    void removeNode(Node node) {
+    private void removeNode(Node node) {
         if (node.prev == null) {
             if (node.next == null) {
                 this.prev = null;
@@ -90,6 +78,42 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
         }
         historyMap.remove(node.element.getId());
+    }
+
+    private static class Node {
+        private Node prev;
+        private Node next;
+        private Task element;
+
+        Node(Node prev, Task element, Node next) {
+            this.prev = prev;
+            this.element = element;
+            this.next = next;
+        }
+
+        public Node getPrev() {
+            return prev;
+        }
+
+        public void setPrev(Node prev) {
+            this.prev = prev;
+        }
+
+        public Node getNext() {
+            return next;
+        }
+
+        public void setNext(Node next) {
+            this.next = next;
+        }
+
+        public Task getElement() {
+            return element;
+        }
+
+        public void setElement(Task element) {
+            this.element = element;
+        }
     }
 
 }

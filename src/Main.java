@@ -27,38 +27,38 @@ public class Main {
 
         printHistory(tm);
 
-        tm.getTaskById(0);
-        tm.getTaskById(1);
-        tm.getTaskById(0);
-        tm.getEpicById(2);
-        tm.getEpicById(3);
-        tm.getSubtaskById(4);
-        tm.getTaskById(1);
-        tm.getEpicById(2);
-        tm.getEpicById(3);
-        tm.getSubtaskById(5);
-        tm.getSubtaskById(6);
-        tm.getSubtaskById(4);
-        tm.getSubtaskById(5);
-        tm.getSubtaskById(6);
+        tm.getTaskById(task1.getId());
+        tm.getTaskById(task2.getId());
+        tm.getTaskById(task1.getId());
+        tm.getEpicById(epic1.getId());
+        tm.getEpicById(epic2.getId());
+        tm.getSubtaskById(subtask1.getId());
+        tm.getTaskById(task2.getId());
+        tm.getEpicById(epic1.getId());
+        tm.getEpicById(epic2.getId());
+        tm.getSubtaskById(subtask2.getId());
+        tm.getSubtaskById(subtask3.getId());
+        tm.getSubtaskById(subtask1.getId());
+        tm.getSubtaskById(subtask2.getId());
+        tm.getSubtaskById(subtask3.getId());
 
         printHistory(tm);
 
-        tm.deleteTaskById(0);
+        tm.deleteTaskById(task1.getId());
         printHistory(tm);
 
-        tm.deleteEpicById(2);
+        tm.deleteEpicById(epic1.getId());
         printHistory(tm);
     }
 
-    static void printTasks(TaskManager tm) {
+    private static void printTasks(TaskManager tm) {
         System.out.println("////////////////");
         System.out.println("Список Эпиков - " + tm.getEpics().toString());
         System.out.println("Список задач - " + tm.getTasks().toString());
         System.out.println("Список подзадач - " + tm.getSubtasks().toString());
     }
 
-    static void printHistory(TaskManager manager) {
+    private static void printHistory(TaskManager manager) {
         System.out.println("История:");
         for (Task task : manager.getHistory()) {
             System.out.println(task);
