@@ -24,7 +24,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     Node last;
     Node prev;
 
-    public InMemoryHistoryManager(){
+    public InMemoryHistoryManager() {
         historyMap = new HashMap<>();
     }
 
@@ -35,7 +35,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if(task == null) {
+        if (task == null) {
             return;
         }
         if (historyMap.containsKey(task.getId())) {
