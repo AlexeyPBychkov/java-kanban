@@ -1,6 +1,6 @@
 package model;
 
-public class Subtask extends Task{
+public class Subtask extends Task {
     private Epic parentEpic;
 
     public Subtask(String title, String description, TaskStatus status, Epic parentEpic) {
@@ -16,5 +16,14 @@ public class Subtask extends Task{
         this.parentEpic = parentEpic;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Subtask{" +
+                "title='" + getTitle() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", id=" + getId() +
+                ", status=" + getStatus() +
+                ", epicID=" + parentEpic.getId() +
+                '}';
+    }
 }

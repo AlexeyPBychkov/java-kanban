@@ -18,11 +18,11 @@ public class Epic extends Task {
     public void removeSubtask(Subtask subtask) {
         int idx = -1;
         for (int i = 0; i < subtasks.size(); i++) {
-            if(subtasks.get(i).equals(subtask)) {
+            if (subtasks.get(i).equals(subtask)) {
                 idx = i;
             }
         }
-        if(idx >= 0) {
+        if (idx >= 0) {
             subtasks.remove(idx);
         }
     }
@@ -31,6 +31,15 @@ public class Epic extends Task {
         return subtasks;
     }
 
-
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "title='" + getTitle() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", id=" + getId() +
+                ", status=" + getStatus() +
+                ", subtasks=" + getSubtasks() +
+                '}';
+    }
 
 }
