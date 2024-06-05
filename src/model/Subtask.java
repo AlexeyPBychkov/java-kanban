@@ -26,4 +26,14 @@ public class Subtask extends Task {
                 ", epicID=" + parentEpic.getId() +
                 '}';
     }
+
+    @Override
+    public String getEpicId() {
+        return Integer.toString(parentEpic.getId());
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.SUBTASK;
+    }
 }

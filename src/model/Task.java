@@ -69,4 +69,12 @@ public class Task {
                 ", status=" + status +
                 '}';
     }
+
+    public String getEpicId() {
+        return null;
+    }
+
+    public TaskType getType() {
+        return TaskType.TASK;
+    }
 }
