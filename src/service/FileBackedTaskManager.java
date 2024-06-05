@@ -156,8 +156,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.setStatus(getStatus(taskArray[3]));
                 break;
             case "SUBTASK":
-                task = new Subtask(taskArray[2], taskArray[4], (getStatus(taskArray[3]))
-                        , getEpicById(Integer.parseInt(taskArray[5])));
+                task = new Subtask(taskArray[2], taskArray[4], (getStatus(taskArray[3])),
+                        getEpicById(Integer.parseInt(taskArray[5])));
                 task.setId(Integer.parseInt(taskArray[0]));
                 break;
             default:
