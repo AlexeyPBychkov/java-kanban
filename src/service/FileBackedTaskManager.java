@@ -10,6 +10,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
+    private static String HEADERS_FILE_STRING = "id,type,name,status,description,epic";
+    private final File file = new File("task.csv");
+
     public FileBackedTaskManager(HistoryManager historyManager) {
         super(historyManager);
     }
@@ -92,8 +95,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private void save() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("task.csv"))) {
-            writer.append("id,type,name,status,description,epic\n");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.append(HEADERS_FILE_STRING + "\n");
             for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
                 writer.append(toString(entry.getValue()));
             }
@@ -134,7 +137,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             seqId = maxId;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerLoadException(e, "Не могу загрузить из файла");
         }
     }
 
@@ -145,17 +148,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private Task fromString(String value) {
         String[] taskArray = value.split(",");
         Task task;
-        switch (taskArray[1]) {
-            case "TASK":
+        switch (TaskType.valueOf(taskArray[1])) {
+            case TaskType.TASK:
                 task = new Task(taskArray[2], taskArray[4], (getStatus(taskArray[3])));
                 task.setId(Integer.parseInt(taskArray[0]));
                 break;
-            case "EPIC":
+            case TaskType.EPIC:
                 task = new Epic(taskArray[2], taskArray[4]);
                 task.setId(Integer.parseInt(taskArray[0]));
                 task.setStatus(getStatus(taskArray[3]));
                 break;
-            case "SUBTASK":
+            case TaskType.SUBTASK:
                 task = new Subtask(taskArray[2], taskArray[4], (getStatus(taskArray[3])),
                         getEpicById(Integer.parseInt(taskArray[5])));
                 task.setId(Integer.parseInt(taskArray[0]));
@@ -167,12 +170,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private TaskStatus getStatus(String value) {
-        return switch (value) {
-            case "NEW" -> TaskStatus.NEW;
-            case "IN_PROGRESS" -> TaskStatus.IN_PROGRESS;
-            case "DONE" -> TaskStatus.DONE;
-            default -> null;
-        };
+        return TaskStatus.valueOf(value);
     }
 
 }
