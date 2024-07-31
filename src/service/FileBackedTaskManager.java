@@ -4,13 +4,15 @@ import converter.TaskConverter;
 import model.*;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    private static String HEADERS_FILE_STRING = "id,type,name,status,description,epic";
+    private static String HEADERS_FILE_STRING = "id,type,name,status,description,epic,startTime,endTime,duration";
     private final File file = new File("task.csv");
 
     public FileBackedTaskManager(HistoryManager historyManager) {
@@ -152,16 +154,31 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             case TaskType.TASK:
                 task = new Task(taskArray[2], taskArray[4], (getStatus(taskArray[3])));
                 task.setId(Integer.parseInt(taskArray[0]));
+                task.setStartTime(LocalDateTime.parse(taskArray[6]));
+//                task.setDuration(Duration.ofMinutes(Integer.parseInt(taskArray[8])));
+                task.setDuration(Duration.parse(taskArray[8]));
+                prioritizedTasks.add(task);
                 break;
             case TaskType.EPIC:
                 task = new Epic(taskArray[2], taskArray[4]);
                 task.setId(Integer.parseInt(taskArray[0]));
                 task.setStatus(getStatus(taskArray[3]));
+                if (!taskArray[6].equals("null")) {
+                    task.setStartTime(LocalDateTime.parse(taskArray[6]));
+                    ((Epic) task).setEndTime(LocalDateTime.parse(taskArray[7]));
+//                task.setDuration(Duration.ofMinutes(Integer.parseInt(taskArray[8])));
+                    task.setDuration(Duration.parse(taskArray[8]));
+                    prioritizedTasks.add(task);
+                }
                 break;
             case TaskType.SUBTASK:
                 task = new Subtask(taskArray[2], taskArray[4], (getStatus(taskArray[3])),
                         getEpicById(Integer.parseInt(taskArray[5])));
                 task.setId(Integer.parseInt(taskArray[0]));
+                task.setStartTime(LocalDateTime.parse(taskArray[6]));
+//                task.setDuration(Duration.ofMinutes(Integer.parseInt(taskArray[8])));
+                task.setDuration(Duration.parse(taskArray[8]));
+                prioritizedTasks.add(task);
                 break;
             default:
                 task = null;
@@ -172,5 +189,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private TaskStatus getStatus(String value) {
         return TaskStatus.valueOf(value);
     }
+
 
 }
