@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 @DisplayName("Epic")
 public class EpicTest {
 
@@ -14,6 +17,8 @@ public class EpicTest {
     void shouldAddSubtaskToEpic() {
         Epic epic = new Epic("Title", "Description");
         Subtask subtask = new Subtask("Title", "Description", TaskStatus.NEW, epic);
+        subtask.setStartTime(LocalDateTime.now());
+        subtask.setDuration(Duration.ofMinutes(10));
         epic.addSubtask(subtask);
         Subtask subtaskFromEpic = epic.getSubtasks().get(0);
         assertEqualsSubtasks(subtask, subtaskFromEpic, "Сабтаски должны совпадать");
@@ -34,6 +39,8 @@ public class EpicTest {
     void shouldRemoveSubtask() {
         Epic epic = new Epic("Title", "Description");
         Subtask subtask = new Subtask("Subtask Title", "Subtask Description", TaskStatus.NEW, epic);
+        subtask.setStartTime(LocalDateTime.now());
+        subtask.setDuration(Duration.ofMinutes(10));
         epic.addSubtask(subtask);
         Assertions.assertEquals(epic.getSubtasks().size(), 1);
         epic.removeSubtask(subtask);

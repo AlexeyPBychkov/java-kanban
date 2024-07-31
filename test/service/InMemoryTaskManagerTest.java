@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 class InMemoryTaskManagerTest {
 
     TaskManager tm;
@@ -21,6 +24,18 @@ class InMemoryTaskManagerTest {
         Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1);
         Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.NEW, epic1);
         Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.NEW, epic2);
+
+        task1.setStartTime(LocalDateTime.now());
+        task1.setDuration(Duration.ofMinutes(180));
+        task2.setStartTime(LocalDateTime.now().plusDays(1));
+        task2.setDuration(Duration.ofMinutes(140));
+
+        subtask1.setStartTime(LocalDateTime.now().plusDays(2));
+        subtask1.setDuration(Duration.ofMinutes(234));
+        subtask2.setStartTime(LocalDateTime.now().plusDays(3));
+        subtask2.setDuration(Duration.ofMinutes(45));
+        subtask3.setStartTime(LocalDateTime.now().plusDays(4));
+        subtask3.setDuration(Duration.ofMinutes(78));
 
         tm.createTask(task1);
         tm.createTask(task2);
@@ -166,6 +181,8 @@ class InMemoryTaskManagerTest {
         Assertions.assertEquals(tm.getSubtasks().size(), 3);
         Epic epic = new Epic("Эпик 3", "Эпик с одной подзадачей");
         Subtask subtask = new Subtask("Подзадача 4", "Описание подзадачи 4", TaskStatus.NEW, epic);
+        subtask.setStartTime(LocalDateTime.now().minusDays(1));
+        subtask.setDuration(Duration.ofMinutes(10));
         tm.createEpic(epic);
         tm.createSubtask(subtask);
         Assertions.assertEquals(tm.getSubtasks().size(), 4);
