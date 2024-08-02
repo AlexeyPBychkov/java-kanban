@@ -48,6 +48,9 @@ public class InMemoryTaskManager implements TaskManager {
             task.setId(getCurrentId());
             tasks.put(task.getId(), task);
             addPrioritizedTask(task);
+        } else {
+            System.out.println("Задача не создана. " +
+                    "Новая задача пересекается по времени с имеющейся");
         }
     }
 
@@ -145,6 +148,9 @@ public class InMemoryTaskManager implements TaskManager {
             subtask.getParentEpic().addSubtask(subtask);
             updateEpicStatus(subtask.getParentEpic());
             addPrioritizedTask(subtask);
+        } else {
+            System.out.println("Задача не создана. " +
+                    "Новая задача пересекается по времени с имеющейся");
         }
     }
 

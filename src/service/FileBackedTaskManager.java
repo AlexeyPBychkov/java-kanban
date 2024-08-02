@@ -155,7 +155,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task = new Task(taskArray[2], taskArray[4], (getStatus(taskArray[3])));
                 task.setId(Integer.parseInt(taskArray[0]));
                 task.setStartTime(LocalDateTime.parse(taskArray[6]));
-//                task.setDuration(Duration.ofMinutes(Integer.parseInt(taskArray[8])));
                 task.setDuration(Duration.parse(taskArray[8]));
                 prioritizedTasks.add(task);
                 break;
@@ -166,7 +165,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 if (!taskArray[6].equals("null")) {
                     task.setStartTime(LocalDateTime.parse(taskArray[6]));
                     ((Epic) task).setEndTime(LocalDateTime.parse(taskArray[7]));
-//                task.setDuration(Duration.ofMinutes(Integer.parseInt(taskArray[8])));
                     task.setDuration(Duration.parse(taskArray[8]));
                     prioritizedTasks.add(task);
                 }
@@ -176,7 +174,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         getEpicById(Integer.parseInt(taskArray[5])));
                 task.setId(Integer.parseInt(taskArray[0]));
                 task.setStartTime(LocalDateTime.parse(taskArray[6]));
-//                task.setDuration(Duration.ofMinutes(Integer.parseInt(taskArray[8])));
                 task.setDuration(Duration.parse(taskArray[8]));
                 prioritizedTasks.add(task);
                 break;
