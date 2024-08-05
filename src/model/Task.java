@@ -1,13 +1,17 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task {
+public class Task implements Comparable<Task> {
 
     private String title;
     private String description;
     private int id;
     private TaskStatus status;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String title, String description, TaskStatus status) {
         this.title = title;
@@ -76,5 +80,31 @@ public class Task {
 
     public TaskType getType() {
         return TaskType.TASK;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return getStartTime().plus(getDuration());
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        if (this.getStartTime().isAfter(o.getStartTime())) return 1;
+        return -1;
     }
 }

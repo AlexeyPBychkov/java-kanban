@@ -8,6 +8,8 @@ import model.TaskStatus;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     protected final HashMap<Integer, Task> tasks = new HashMap<>();
@@ -15,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final HashMap<Integer, Epic> epics = new HashMap<>();
     protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     protected int seqId = -1;
-
+    protected final TreeSet<Task> prioritizedTasks = new TreeSet<>();
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
@@ -42,8 +44,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createTask(Task task) {
-        task.setId(getCurrentId());
-        tasks.put(task.getId(), task);
+        if (isNewTaskHasNoIntersection(task)) {
+            task.setId(getCurrentId());
+            tasks.put(task.getId(), task);
+            addPrioritizedTask(task);
+        } else {
+            System.out.println("Задача не создана. " +
+                    "Новая задача пересекается по времени с имеющейся");
+        }
     }
 
     @Override
@@ -84,6 +92,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void createEpic(Epic epic) {
         epic.setId(getCurrentId());
         epics.put(epic.getId(), epic);
+        addPrioritizedTask(epic);
     }
 
     @Override
@@ -133,10 +142,16 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createSubtask(Subtask subtask) {
-        subtask.setId(getCurrentId());
-        subtasks.put(subtask.getId(), subtask);
-        subtask.getParentEpic().addSubtask(subtask);
-        updateEpicStatus(subtask.getParentEpic());
+        if (isNewTaskHasNoIntersection(subtask)) {
+            subtask.setId(getCurrentId());
+            subtasks.put(subtask.getId(), subtask);
+            subtask.getParentEpic().addSubtask(subtask);
+            updateEpicStatus(subtask.getParentEpic());
+            addPrioritizedTask(subtask);
+        } else {
+            System.out.println("Задача не создана. " +
+                    "Новая задача пересекается по времени с имеющейся");
+        }
     }
 
     @Override
@@ -200,5 +215,38 @@ public class InMemoryTaskManager implements TaskManager {
     private int getCurrentId() {
         seqId++;
         return seqId;
+    }
+
+    public void addPrioritizedTask(Task task) {
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
+    }
+
+    public List<Task> getPrioritizedTasks() {
+        return prioritizedTasks.stream().toList();
+    }
+
+    protected boolean isTaskIntersectOtherTask(Task t1, Task t2) {
+        if (t1.getStartTime() == null || t2.getStartTime() == null || t1.getDuration() == null
+                || t2.getDuration() == null) {
+            return false;
+        } else {
+            if (t1.getStartTime().isAfter(t2.getStartTime())) {
+                Task t = t1;
+                t1 = t2;
+                t2 = t;
+            }
+            if (t1.getEndTime().isBefore(t2.getStartTime())) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    protected boolean isNewTaskHasNoIntersection(Task task) {
+        return getPrioritizedTasks().stream()
+                .filter(task1 -> isTaskIntersectOtherTask(task1, task))
+                .collect(Collectors.toList()).isEmpty();
     }
 }
