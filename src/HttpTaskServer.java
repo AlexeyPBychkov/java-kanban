@@ -1,8 +1,3 @@
-import adapters.DurationAdapter;
-import adapters.LocalDateTimeAdapter;
-import adapters.SubtasksListAdapter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import handlers.*;
 import model.Epic;
@@ -16,7 +11,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class HttpTaskServer {
 
@@ -57,15 +51,6 @@ public class HttpTaskServer {
         httpServer.createContext("/prioritized", new PriorityHandler(tm));
         httpServer.start();
 
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Duration.class, new DurationAdapter())
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .registerTypeAdapter(Subtask.class, new SubtasksListAdapter())
-                .create();
-
-        List<Task> prioritizedTasks = tm.getPrioritizedTasks();
-        String obj = gson.toJson(tm.getPrioritizedTasks());
 
         System.out.println("HTTP-сервер запущен");
     }
