@@ -91,10 +91,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createEpic(Epic epic) {
+    public boolean createEpic(Epic epic) {
         epic.setId(getCurrentId());
         epics.put(epic.getId(), epic);
         addPrioritizedTask(epic);
+        return true;
     }
 
     @Override

@@ -1,10 +1,12 @@
 package handlers;
 
 import adapters.DurationAdapter;
+import adapters.EpicAdapter;
 import adapters.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
+import model.Epic;
 import model.Subtask;
 import service.TaskManager;
 
@@ -26,6 +28,7 @@ public class SubtaskHandler extends BaseHttpHandler {
                 .setPrettyPrinting()
                 .registerTypeAdapter(Duration.class, new DurationAdapter())
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .registerTypeAdapter(Epic.class, new EpicAdapter(tm))
                 .create();
         String[] str = exchange.getRequestURI().getPath().split("/");
         switch (method) {
@@ -38,6 +41,7 @@ public class SubtaskHandler extends BaseHttpHandler {
                     if (subtask == null) {
                         sendNotFound(exchange);
                     } else {
+                        String str1 = gson.toJson(subtask);
                         sendText(exchange, gson.toJson(subtask));
                     }
                 }
