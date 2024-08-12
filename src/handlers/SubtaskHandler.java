@@ -48,8 +48,8 @@ public class SubtaskHandler extends BaseHttpHandler {
                 break;
             case "POST":
                 if (str.length == 2 && str[1].equals("subtasks")) {
-                    Subtask subtask = gson.fromJson(new String(exchange.getRequestBody().readAllBytes()
-                            , StandardCharsets.UTF_8), Subtask.class);
+                    Subtask subtask = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(),
+                            StandardCharsets.UTF_8), Subtask.class);
                     if (tm.createSubtask(subtask)) {
                         sendPostSuccess(exchange);
                     } else {
@@ -57,8 +57,8 @@ public class SubtaskHandler extends BaseHttpHandler {
                     }
                 }
                 if (str.length > 2) {
-                    Subtask subtask = gson.fromJson(new String(exchange.getRequestBody().readAllBytes()
-                            , StandardCharsets.UTF_8), Subtask.class);
+                    Subtask subtask = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(),
+                            StandardCharsets.UTF_8), Subtask.class);
                     subtask.setId(Integer.parseInt(str[2]));
                     tm.updateSubtask(subtask);
                     sendPostSuccess(exchange);

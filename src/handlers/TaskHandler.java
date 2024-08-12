@@ -44,8 +44,8 @@ public class TaskHandler extends BaseHttpHandler {
                 break;
             case "POST":
                 if (str.length == 2 && str[1].equals("tasks")) {
-                    Task task = gson.fromJson(new String(exchange.getRequestBody().readAllBytes()
-                            , StandardCharsets.UTF_8), Task.class);
+                    Task task = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(),
+                            StandardCharsets.UTF_8), Task.class);
                     if (tm.createTask(task)) {
                         sendPostSuccess(exchange);
                     } else {
@@ -53,8 +53,8 @@ public class TaskHandler extends BaseHttpHandler {
                     }
                 }
                 if (str.length > 2) {
-                    Task task = gson.fromJson(new String(exchange.getRequestBody().readAllBytes()
-                            , StandardCharsets.UTF_8), Task.class);
+                    Task task = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(),
+                            StandardCharsets.UTF_8), Task.class);
                     task.setId(Integer.parseInt(str[2]));
                     tm.updateTask(task);
                     sendPostSuccess(exchange);
