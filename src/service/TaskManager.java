@@ -38,7 +38,7 @@ public interface TaskManager {
 
     Subtask getSubtaskById(int id);
 
-    void createSubtask(Subtask subtask);
+    boolean createSubtask(Subtask subtask);
 
     void updateSubtask(Subtask subtask);
 
