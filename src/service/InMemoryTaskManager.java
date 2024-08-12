@@ -43,14 +43,16 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task) {
+    public boolean createTask(Task task) {
         if (isNewTaskHasNoIntersection(task)) {
             task.setId(getCurrentId());
             tasks.put(task.getId(), task);
             addPrioritizedTask(task);
+            return true;
         } else {
             System.out.println("Задача не создана. " +
                     "Новая задача пересекается по времени с имеющейся");
+            return false;
         }
     }
 

@@ -14,7 +14,7 @@ public interface TaskManager {
 
     Task getTaskById(int id);
 
-    void createTask(Task task);
+    boolean createTask(Task task);
 
     void updateTask(Task task);
 
