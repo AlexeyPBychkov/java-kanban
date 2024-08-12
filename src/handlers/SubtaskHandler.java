@@ -59,6 +59,7 @@ public class SubtaskHandler extends BaseHttpHandler {
                 if (str.length > 2) {
                     Subtask subtask = gson.fromJson(new String(exchange.getRequestBody().readAllBytes()
                             , StandardCharsets.UTF_8), Subtask.class);
+                    subtask.setId(Integer.parseInt(str[2]));
                     tm.updateSubtask(subtask);
                     sendPostSuccess(exchange);
                 }

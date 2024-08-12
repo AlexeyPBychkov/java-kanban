@@ -55,6 +55,7 @@ public class TaskHandler extends BaseHttpHandler {
                 if (str.length > 2) {
                     Task task = gson.fromJson(new String(exchange.getRequestBody().readAllBytes()
                             , StandardCharsets.UTF_8), Task.class);
+                    task.setId(Integer.parseInt(str[2]));
                     tm.updateTask(task);
                     sendPostSuccess(exchange);
                 }
