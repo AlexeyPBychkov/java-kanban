@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 public class HttpTaskServer {
 
@@ -64,8 +64,8 @@ public class HttpTaskServer {
                 .registerTypeAdapter(Subtask.class, new SubtasksListAdapter())
                 .create();
 
-        ArrayList<Epic> epics = tm.getEpics();
-        String obj = gson.toJson(tm.getEpics());
+        List<Task> prioritizedTasks = tm.getPrioritizedTasks();
+        String obj = gson.toJson(tm.getPrioritizedTasks());
 
         System.out.println("HTTP-сервер запущен");
     }
