@@ -43,14 +43,16 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task) {
+    public boolean createTask(Task task) {
         if (isNewTaskHasNoIntersection(task)) {
             task.setId(getCurrentId());
             tasks.put(task.getId(), task);
             addPrioritizedTask(task);
+            return true;
         } else {
             System.out.println("Задача не создана. " +
                     "Новая задача пересекается по времени с имеющейся");
+            return false;
         }
     }
 
@@ -89,10 +91,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createEpic(Epic epic) {
+    public boolean createEpic(Epic epic) {
         epic.setId(getCurrentId());
         epics.put(epic.getId(), epic);
         addPrioritizedTask(epic);
+        return true;
     }
 
     @Override
@@ -141,16 +144,18 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createSubtask(Subtask subtask) {
+    public boolean createSubtask(Subtask subtask) {
         if (isNewTaskHasNoIntersection(subtask)) {
             subtask.setId(getCurrentId());
             subtasks.put(subtask.getId(), subtask);
             subtask.getParentEpic().addSubtask(subtask);
             updateEpicStatus(subtask.getParentEpic());
             addPrioritizedTask(subtask);
+            return true;
         } else {
             System.out.println("Задача не создана. " +
                     "Новая задача пересекается по времени с имеющейся");
+            return false;
         }
     }
 
