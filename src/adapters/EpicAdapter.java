@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class EpicAdapter extends TypeAdapter<Epic> {
 
-    private TaskManager tm;
+    private final TaskManager tm;
 
     public EpicAdapter(TaskManager tm) {
         this.tm = tm;

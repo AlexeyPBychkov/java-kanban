@@ -59,10 +59,12 @@ public class EpicHandler extends BaseHttpHandler {
                 if (str.length == 2 && str[1].equals("epics")) {
                     Epic epic = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(),
                             StandardCharsets.UTF_8), Epic.class);
-                    if (tm.createEpic(epic)) {
-                        sendPostSuccess(exchange);
-                    } else {
-                        sendHasInteractions(exchange);
+                    if (epic != null) {
+                        if (tm.createEpic(epic)) {
+                            sendPostSuccess(exchange);
+                        } else {
+                            sendHasInteractions(exchange);
+                        }
                     }
                 }
                 break;

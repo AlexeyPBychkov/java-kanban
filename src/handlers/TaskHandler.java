@@ -46,18 +46,22 @@ public class TaskHandler extends BaseHttpHandler {
                 if (str.length == 2 && str[1].equals("tasks")) {
                     Task task = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(),
                             StandardCharsets.UTF_8), Task.class);
-                    if (tm.createTask(task)) {
-                        sendPostSuccess(exchange);
-                    } else {
-                        sendHasInteractions(exchange);
+                    if (task != null) {
+                        if (tm.createTask(task)) {
+                            sendPostSuccess(exchange);
+                        } else {
+                            sendHasInteractions(exchange);
+                        }
                     }
                 }
                 if (str.length > 2) {
                     Task task = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(),
                             StandardCharsets.UTF_8), Task.class);
-                    task.setId(Integer.parseInt(str[2]));
-                    tm.updateTask(task);
-                    sendPostSuccess(exchange);
+                    if (task != null) {
+                        task.setId(Integer.parseInt(str[2]));
+                        tm.updateTask(task);
+                        sendPostSuccess(exchange);
+                    }
                 }
                 break;
             case "DELETE":
